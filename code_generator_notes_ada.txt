@@ -1,0 +1,281 @@
+#+TITLE: Code Generator
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="code_generator_notes_ada.css" />
+#+STARTUP: content
+#+OPTIONS: ^:{}
+
+* links
+https://openclassrooms.com/fr/courses/900279-apprenez-a-programmer-avec-ada/897336-la-programmation-modulaire-iii-genericite
+
+https://en.wikibooks.org/wiki/Ada_Programming/Generics
+
+file:///c:/Users/jeremy/Dropbox/projets_perso/ada/aunit/doc/build/aunit_cb/html/aunit_cb/test_organization.html#using-aunit-test-fixtures
+
+https://bellekens.com/2011/08/10/uml-best-practice-attribute-or-association/
+
+* Requirements
+
+=Code Generator= aims to automatize generation of source code to enforce chosen
+programming style.
+
+** Input
+
+Inputs have to be at the declaration level (types, constants, subprograms...).
+
+Given a generation type (data access object, business object...), one should
+write the minimum informations to generate full header file content and most of
+the body file content.
+
+A solution is to be found so that re-generating outputs won't erase hand-written
+code (in =ada= the subprograms are separate).
+
+In a first step, input is given using subprograms calls.
+
+: initiate_project (project_name);
+: add_class (class_name, fields);
+: add_procedure (procedure_name, parameters);
+: output_project (directory_name);
+
+Later to prevent recompilation it may be written
+- in text files processed by the generator, or
+- in script langage (python, lua).
+
+** Model
+
+The model should be able to represent any element of a header file.
+
+The model is a subset of UML langage. Implementation follows UML descriptions
+given in [[*%5B1%5D %5B%5Bhttps://www.uml-diagrams.org/%5D%5Buml-diagrams.org%5D%5D][{1}]].
+
+** Output
+
+One should be able to change the code generation details without having to
+recompile project.
+
+* Architecture
+
+** Introductino
+The chosen langage is =ada=.
+
+3 main modules are defined:
+- Project_Loader,
+- Model,
+- Project_Output.
+
+Each module is an =ada= project.
+
+Project_Output use =ada= library =Templates Parser= (see [[*%5B2%5D %5B%5Bhttp://docs.adacore.com/live/wave/aws/html/template_parser/index.html%5D%5Btemplate parser documentation%5D%5D][{2}]]).
+
+** Project Loader
+
+Available services:
+
+- create a root project.
+- add project to the root.
+- a project can use OOP (add class, members and operations) or Imperative programming (add subprogram).
+
+** Model
+
+The following UML elements are implemented.
+
+*** Element
+https://www.uml-diagrams.org/uml-core.html#element
+
+: Element:
+: - ownedComments: Element [0-n]
+: - ownedElements: Element [0-n]
+: - ownerElement:  Element [0-1]
+
+*** Named Element
+https://www.uml-diagrams.org/uml-core.html#named-element
+
+A named element can be anonymus, or have a name, which can be empty.
+
+A named element inside a namespace has a [[https://www.uml-diagrams.org/visibility.html][visibility]]: public, package, protected, private.
+
+: Named_Element: Element
+: - isAnonymus: Boolean
+: - visibility: Visibility (only inside a namespace)
+
+*** Multiplicity
+https://www.uml-diagrams.org/multiplicity.html#multiplicity
+
+: Multiplicity
+: - lower-bound
+: - upper-bound
+
+*** Multiplicity Element
+https://www.uml-diagrams.org/multiplicity.html#multiplicity-element
+
+|-----------------+-----------+----------+-------------------|
+| Collection Type | isOrdered | isUnique |                   |
+|-----------------+-----------+----------+-------------------|
+| Multiset, bag   | false     | false    | multiset = bag    |
+| Sequence, array | true      | false    | sequence != array |
+| Set             | false     | true     |                   |
+| Ordered set     | true      | true     |                   |
+|-----------------+-----------+----------+-------------------|
+
+*** Relationship
+**** UML/2.4.1/Infrastructure/PDF 9.17.2
+
+Relationship has no specific semantics. The various subclasses of Relationship
+will add semantics appropriate to the concept they represent.
+
+https://www.uml-diagrams.org/uml-core.html#relationship
+
+: Relationship: Element
+
+ Subclasses of relationship are:
+    - association,
+    - directed relationship.
+
+*** Association
+https://www.uml-diagrams.org/association.html
+
+: Association: Relationship
+
+*** Directed Relationship
+https://www.uml-diagrams.org/uml-core.html#directed-relationship
+
+ Subclasses of the directed relationship are:
+    - generalization,
+    - dependency,
+    - include (from use cases),
+    - extend (from use cases),
+    - template binding.
+
+*** Namespace
+https://www.uml-diagrams.org/namespace.html
+
+ Some examples (subclasses) of the namespace are:
+    - package
+    - classifier
+
+A namespace contains named elements.
+
+Namespace
+
+*** Package
+https://www.uml-diagrams.org/package-diagrams.html#package
+
+A package may own members. A member is a Named_Element and a Packageable_Element.
+
+As a Namespace, a package can import elements of other packages.
+
+*** Operation
+https://www.uml-diagrams.org/operation.html
+
+*** Packageable_Element
+https://www.uml-diagrams.org/package-diagrams.html#packageable-element
+
+*** Type
+https://www.uml-diagrams.org/uml-core.html#type
+
+: Type: Packageable_Element
+
+**** Array
+**** Classifier
+
+: Classifier: Type, Templateable_Element, Redefinable_Element, Namespace
+
+**** Enumeration
+*** Feature
+https://www.uml-diagrams.org/uml-core.html#feature
+
+: Feature
+: - isStatic: Boolean
+
+*** Structural_Feature
+https://www.uml-diagrams.org/uml-core.html#feature
+
+: Structural_Feature: Feature
+: - isReadOnly: Boolean
+
+*** Behavioral_Feature
+https://www.uml-diagrams.org/uml-core.html#feature
+
+https://www.uml-diagrams.org/operation.html
+
+: Behavioral_Feature: Feature
+: - isQuery: Boolean
+: - parameter-list: Parameter [0-n]
+: - returnSpec: (Return_Type [0-1], Multiplicity [0-1])
+: - isAbstract: Boolean
+
+? oper-properties ?
+
+*** Parameter
+https://www.uml-diagrams.org/operation.html
+
+: Parameter
+: - direction: {in,out,inout} [1-1]
+: - parm-name: string
+: - type-expression: string
+: - multiplicity: Multiplicity [0-1]
+: - default: string [0-1]
+: - parm-properties [0-n]
+
+** Project Output
+
+* Design
+
+** Input
+
+** Model
+
+
+*** Ownership and Relationship
+
+To prevent some implementation difficulties (circular importation of Element and Comment),
+links between elements are
+
+
+*** About Element
+
+Definitions given by =uml-diagrams.org= are not necesseraly meet.
+
+**** Element and Comment
+
+- a Comment is an Element;
+- an Element may contain other Elements.
+
+Since a Comment doesn't own anything, and we want to meet the Liskov
+Substitution principle, a Comment isn't an Element.
+
+An Element may contains Comments, and a Comment may have one or more owning
+Elements.
+
+**** Element and Owned_Element
+
+The previous point is also true for Parameter: The only thing it may own is
+Comment.
+
+Any UML element (except for Comment and Relationship) can have one and only one Owning_Element, but
+not every UML element can own other element.
+
+A Named_Element can only be owned by one Named_Element (which is a Namespace).
+
+** Code generation
+
+Template files make it easy to change the generation without recompiling the
+generator.
+
+* Implementation
+
+** Input
+
+module: Project_Loader
+
+
+
+* Links
+
+** [1] [[https://www.uml-diagrams.org/][uml-diagrams.org]]
+
+** [2] [[http://docs.adacore.com/live/wave/aws/html/template_parser/index.html][template parser documentation]]
+
+* COMMENT Local Variables
+# Local Variables:
+# mode:org
+# coding: utf-8-unix
+# End:

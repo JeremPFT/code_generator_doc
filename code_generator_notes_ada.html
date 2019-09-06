@@ -1,0 +1,894 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-09-02 lun. 12:16 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Code Generator</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="code_generator_notes_ada.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Code Generator</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org3478cb1">1. links</a></li>
+<li><a href="#org79d1a5d">2. Requirements</a>
+<ul>
+<li><a href="#org89ff8f8">2.1. Input</a></li>
+<li><a href="#org745e09c">2.2. Model</a></li>
+<li><a href="#orgf3b801e">2.3. Output</a></li>
+</ul>
+</li>
+<li><a href="#org38a3469">3. Architecture</a>
+<ul>
+<li><a href="#org1979009">3.1. Introductino</a></li>
+<li><a href="#org406c8d2">3.2. Project Loader</a></li>
+<li><a href="#org6a3ec2b">3.3. Model</a>
+<ul>
+<li><a href="#orga76e49c">3.3.1. Element</a></li>
+<li><a href="#org7153782">3.3.2. Named Element</a></li>
+<li><a href="#org81cf764">3.3.3. Multiplicity</a></li>
+<li><a href="#org25ec2dc">3.3.4. Multiplicity Element</a></li>
+<li><a href="#orgd8a99db">3.3.5. Relationship</a></li>
+<li><a href="#org85e1a94">3.3.6. Association</a></li>
+<li><a href="#org3267449">3.3.7. Directed Relationship</a></li>
+<li><a href="#orgaefc7b0">3.3.8. Namespace</a></li>
+<li><a href="#orgf973ffb">3.3.9. Package</a></li>
+<li><a href="#org8942cfe">3.3.10. Operation</a></li>
+<li><a href="#org3631c37">3.3.11. Packageable_Element</a></li>
+<li><a href="#org392554b">3.3.12. Type</a></li>
+<li><a href="#orge3beb02">3.3.13. Feature</a></li>
+<li><a href="#org7c65aa3">3.3.14. Structural_Feature</a></li>
+<li><a href="#org928363d">3.3.15. Behavioral_Feature</a></li>
+<li><a href="#orgfcca70b">3.3.16. Parameter</a></li>
+</ul>
+</li>
+<li><a href="#orgf05d908">3.4. Project Output</a></li>
+</ul>
+</li>
+<li><a href="#orgc733494">4. Design</a>
+<ul>
+<li><a href="#orgd43f420">4.1. Input</a></li>
+<li><a href="#orgfcd9009">4.2. Model</a>
+<ul>
+<li><a href="#org2f3e010">4.2.1. About Element</a></li>
+</ul>
+</li>
+<li><a href="#org529bfa4">4.3. Code generation</a></li>
+</ul>
+</li>
+<li><a href="#org07c325d">5. Implementation</a>
+<ul>
+<li><a href="#orgf7491eb">5.1. Input</a></li>
+</ul>
+</li>
+<li><a href="#orgcddc6c0">6. Links</a>
+<ul>
+<li><a href="#org538bdc9">6.1. [1] uml-diagrams.org</a></li>
+<li><a href="#org5ab3a6d">6.2. [2] template parser documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3478cb1" class="outline-2">
+<h2 id="org3478cb1"><span class="section-number-2">1</span> links</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<a href="https://openclassrooms.com/fr/courses/900279-apprenez-a-programmer-avec-ada/897336-la-programmation-modulaire-iii-genericite">https://openclassrooms.com/fr/courses/900279-apprenez-a-programmer-avec-ada/897336-la-programmation-modulaire-iii-genericite</a>
+</p>
+
+<p>
+<a href="https://en.wikibooks.org/wiki/Ada_Programming/Generics">https://en.wikibooks.org/wiki/Ada_Programming/Generics</a>
+</p>
+
+<p>
+<a href="file:///c:/Users/jeremy/Dropbox/projets_perso/ada/aunit/doc/build/aunit_cb/html/aunit_cb/test_organization.html#using-aunit-test-fixtures">file:///c:/Users/jeremy/Dropbox/projets_perso/ada/aunit/doc/build/aunit_cb/html/aunit_cb/test_organization.html#using-aunit-test-fixtures</a>
+</p>
+
+<p>
+<a href="https://bellekens.com/2011/08/10/uml-best-practice-attribute-or-association/">https://bellekens.com/2011/08/10/uml-best-practice-attribute-or-association/</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org79d1a5d" class="outline-2">
+<h2 id="org79d1a5d"><span class="section-number-2">2</span> Requirements</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<code>Code Generator</code> aims to automatize generation of source code to enforce chosen
+programming style.
+</p>
+</div>
+
+<div id="outline-container-org89ff8f8" class="outline-3">
+<h3 id="org89ff8f8"><span class="section-number-3">2.1</span> Input</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Inputs have to be at the declaration level (types, constants, subprograms&#x2026;).
+</p>
+
+<p>
+Given a generation type (data access object, business object&#x2026;), one should
+write the minimum informations to generate full header file content and most of
+the body file content.
+</p>
+
+<p>
+A solution is to be found so that re-generating outputs won't erase hand-written
+code (in <code>ada</code> the subprograms are separate).
+</p>
+
+<p>
+In a first step, input is given using subprograms calls.
+</p>
+
+<pre class="example">
+initiate_project (project_name);
+add_class (class_name, fields);
+add_procedure (procedure_name, parameters);
+output_project (directory_name);
+</pre>
+
+
+<p>
+Later to prevent recompilation it may be written
+</p>
+<ul class="org-ul">
+<li>in text files processed by the generator, or</li>
+<li>in script langage (python, lua).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org745e09c" class="outline-3">
+<h3 id="org745e09c"><span class="section-number-3">2.2</span> Model</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+The model should be able to represent any element of a header file.
+</p>
+
+<p>
+The model is a subset of UML langage. Implementation follows UML descriptions
+given in <a href="#org538bdc9">{1}</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf3b801e" class="outline-3">
+<h3 id="orgf3b801e"><span class="section-number-3">2.3</span> Output</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+One should be able to change the code generation details without having to
+recompile project.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org38a3469" class="outline-2">
+<h2 id="org38a3469"><span class="section-number-2">3</span> Architecture</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org1979009" class="outline-3">
+<h3 id="org1979009"><span class="section-number-3">3.1</span> Introductino</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+The chosen langage is <code>ada</code>.
+</p>
+
+<p>
+3 main modules are defined:
+</p>
+<ul class="org-ul">
+<li>Project_Loader,</li>
+<li>Model,</li>
+<li>Project_Output.</li>
+</ul>
+
+<p>
+Each module is an <code>ada</code> project.
+</p>
+
+<p>
+Project_Output use <code>ada</code> library <code>Templates Parser</code> (see <a href="#org5ab3a6d">{2}</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org406c8d2" class="outline-3">
+<h3 id="org406c8d2"><span class="section-number-3">3.2</span> Project Loader</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Available services:
+</p>
+
+<ul class="org-ul">
+<li>create a root project.</li>
+<li>add project to the root.</li>
+<li>a project can use OOP (add class, members and operations) or Imperative programming (add subprogram).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6a3ec2b" class="outline-3">
+<h3 id="org6a3ec2b"><span class="section-number-3">3.3</span> Model</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+The following UML elements are implemented.
+</p>
+</div>
+
+<div id="outline-container-orga76e49c" class="outline-4">
+<h4 id="orga76e49c"><span class="section-number-4">3.3.1</span> Element</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#element">https://www.uml-diagrams.org/uml-core.html#element</a>
+</p>
+
+<pre class="example">
+Element:
+- ownedComments: Element [0-n]
+- ownedElements: Element [0-n]
+- ownerElement:  Element [0-1]
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org7153782" class="outline-4">
+<h4 id="org7153782"><span class="section-number-4">3.3.2</span> Named Element</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#named-element">https://www.uml-diagrams.org/uml-core.html#named-element</a>
+</p>
+
+<p>
+A named element can be anonymus, or have a name, which can be empty.
+</p>
+
+<p>
+A named element inside a namespace has a <a href="https://www.uml-diagrams.org/visibility.html">visibility</a>: public, package, protected, private.
+</p>
+
+<pre class="example">
+Named_Element: Element
+- isAnonymus: Boolean
+- visibility: Visibility (only inside a namespace)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org81cf764" class="outline-4">
+<h4 id="org81cf764"><span class="section-number-4">3.3.3</span> Multiplicity</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<p>
+<a href="https://www.uml-diagrams.org/multiplicity.html#multiplicity">https://www.uml-diagrams.org/multiplicity.html#multiplicity</a>
+</p>
+
+<pre class="example">
+Multiplicity
+- lower-bound
+- upper-bound
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org25ec2dc" class="outline-4">
+<h4 id="org25ec2dc"><span class="section-number-4">3.3.4</span> Multiplicity Element</h4>
+<div class="outline-text-4" id="text-3-3-4">
+<p>
+<a href="https://www.uml-diagrams.org/multiplicity.html#multiplicity-element">https://www.uml-diagrams.org/multiplicity.html#multiplicity-element</a>
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Collection Type</th>
+<th scope="col" class="org-left">isOrdered</th>
+<th scope="col" class="org-left">isUnique</th>
+<th scope="col" class="org-left">&#xa0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Multiset, bag</td>
+<td class="org-left">false</td>
+<td class="org-left">false</td>
+<td class="org-left">multiset = bag</td>
+</tr>
+
+<tr>
+<td class="org-left">Sequence, array</td>
+<td class="org-left">true</td>
+<td class="org-left">false</td>
+<td class="org-left">sequence != array</td>
+</tr>
+
+<tr>
+<td class="org-left">Set</td>
+<td class="org-left">false</td>
+<td class="org-left">true</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Ordered set</td>
+<td class="org-left">true</td>
+<td class="org-left">true</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgd8a99db" class="outline-4">
+<h4 id="orgd8a99db"><span class="section-number-4">3.3.5</span> Relationship</h4>
+<div class="outline-text-4" id="text-3-3-5">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#relationship">https://www.uml-diagrams.org/uml-core.html#relationship</a>
+</p>
+
+<pre class="example">
+Relationship: Element
+</pre>
+
+
+<p>
+Subclasses of relationship are:
+</p>
+<ul class="org-ul">
+<li>association,</li>
+<li>directed relationship.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org85e1a94" class="outline-4">
+<h4 id="org85e1a94"><span class="section-number-4">3.3.6</span> Association</h4>
+<div class="outline-text-4" id="text-3-3-6">
+<p>
+<a href="https://www.uml-diagrams.org/association.html">https://www.uml-diagrams.org/association.html</a>
+</p>
+
+<pre class="example">
+Association: Relationship
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org3267449" class="outline-4">
+<h4 id="org3267449"><span class="section-number-4">3.3.7</span> Directed Relationship</h4>
+<div class="outline-text-4" id="text-3-3-7">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#directed-relationship">https://www.uml-diagrams.org/uml-core.html#directed-relationship</a>
+</p>
+
+<p>
+Subclasses of the directed relationship are:
+</p>
+<ul class="org-ul">
+<li>generalization,</li>
+<li>dependency,</li>
+<li>include (from use cases),</li>
+<li>extend (from use cases),</li>
+<li>template binding.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgaefc7b0" class="outline-4">
+<h4 id="orgaefc7b0"><span class="section-number-4">3.3.8</span> Namespace</h4>
+<div class="outline-text-4" id="text-3-3-8">
+<p>
+<a href="https://www.uml-diagrams.org/namespace.html">https://www.uml-diagrams.org/namespace.html</a>
+</p>
+
+<p>
+Some examples (subclasses) of the namespace are:
+</p>
+<ul class="org-ul">
+<li>package</li>
+<li>classifier</li>
+</ul>
+
+<p>
+A namespace contains named elements.
+</p>
+
+<p>
+Namespace
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf973ffb" class="outline-4">
+<h4 id="orgf973ffb"><span class="section-number-4">3.3.9</span> Package</h4>
+<div class="outline-text-4" id="text-3-3-9">
+<p>
+<a href="https://www.uml-diagrams.org/package-diagrams.html#package">https://www.uml-diagrams.org/package-diagrams.html#package</a>
+</p>
+
+<p>
+A package may own members. A member is a Named_Element and a Packageable_Element.
+</p>
+
+<p>
+As a Namespace, a package can import elements of other packages.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8942cfe" class="outline-4">
+<h4 id="org8942cfe"><span class="section-number-4">3.3.10</span> Operation</h4>
+<div class="outline-text-4" id="text-3-3-10">
+<p>
+<a href="https://www.uml-diagrams.org/operation.html">https://www.uml-diagrams.org/operation.html</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3631c37" class="outline-4">
+<h4 id="org3631c37"><span class="section-number-4">3.3.11</span> Packageable_Element</h4>
+<div class="outline-text-4" id="text-3-3-11">
+<p>
+<a href="https://www.uml-diagrams.org/package-diagrams.html#packageable-element">https://www.uml-diagrams.org/package-diagrams.html#packageable-element</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org392554b" class="outline-4">
+<h4 id="org392554b"><span class="section-number-4">3.3.12</span> Type</h4>
+<div class="outline-text-4" id="text-3-3-12">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#type">https://www.uml-diagrams.org/uml-core.html#type</a>
+</p>
+
+<pre class="example">
+Type: Packageable_Element
+</pre>
+</div>
+
+<ol class="org-ol">
+<li><a id="orgfff9e19"></a>Array<br /></li>
+<li><a id="org56332b3"></a>Classifier<br />
+<div class="outline-text-5" id="text-3-3-12-2">
+<pre class="example">
+Classifier: Type, Templateable_Element, Redefinable_Element, Namespace
+</pre>
+</div>
+</li>
+
+<li><a id="orgb0565a4"></a>Enumeration<br /></li>
+</ol>
+</div>
+<div id="outline-container-orge3beb02" class="outline-4">
+<h4 id="orge3beb02"><span class="section-number-4">3.3.13</span> Feature</h4>
+<div class="outline-text-4" id="text-3-3-13">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#feature">https://www.uml-diagrams.org/uml-core.html#feature</a>
+</p>
+
+<pre class="example">
+Feature
+- isStatic: Boolean
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org7c65aa3" class="outline-4">
+<h4 id="org7c65aa3"><span class="section-number-4">3.3.14</span> Structural_Feature</h4>
+<div class="outline-text-4" id="text-3-3-14">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#feature">https://www.uml-diagrams.org/uml-core.html#feature</a>
+</p>
+
+<pre class="example">
+Structural_Feature: Feature
+- isReadOnly: Boolean
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org928363d" class="outline-4">
+<h4 id="org928363d"><span class="section-number-4">3.3.15</span> Behavioral_Feature</h4>
+<div class="outline-text-4" id="text-3-3-15">
+<p>
+<a href="https://www.uml-diagrams.org/uml-core.html#feature">https://www.uml-diagrams.org/uml-core.html#feature</a>
+</p>
+
+<p>
+<a href="https://www.uml-diagrams.org/operation.html">https://www.uml-diagrams.org/operation.html</a>
+</p>
+
+<pre class="example">
+Behavioral_Feature: Feature
+- isQuery: Boolean
+- parameter-list: Parameter [0-n]
+- returnSpec: (Return_Type [0-1], Multiplicity [0-1])
+- isAbstract: Boolean
+</pre>
+
+
+<p>
+? oper-properties ?
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfcca70b" class="outline-4">
+<h4 id="orgfcca70b"><span class="section-number-4">3.3.16</span> Parameter</h4>
+<div class="outline-text-4" id="text-3-3-16">
+<p>
+<a href="https://www.uml-diagrams.org/operation.html">https://www.uml-diagrams.org/operation.html</a>
+</p>
+
+<pre class="example">
+Parameter
+- direction: {in,out,inout} [1-1]
+- parm-name: string
+- type-expression: string
+- multiplicity: Multiplicity [0-1]
+- default: string [0-1]
+- parm-properties [0-n]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf05d908" class="outline-3">
+<h3 id="orgf05d908"><span class="section-number-3">3.4</span> Project Output</h3>
+</div>
+</div>
+
+<div id="outline-container-orgc733494" class="outline-2">
+<h2 id="orgc733494"><span class="section-number-2">4</span> Design</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgd43f420" class="outline-3">
+<h3 id="orgd43f420"><span class="section-number-3">4.1</span> Input</h3>
+</div>
+
+<div id="outline-container-orgfcd9009" class="outline-3">
+<h3 id="orgfcd9009"><span class="section-number-3">4.2</span> Model</h3>
+<div class="outline-text-3" id="text-4-2">
+</div>
+<div id="outline-container-org2f3e010" class="outline-4">
+<h4 id="org2f3e010"><span class="section-number-4">4.2.1</span> About Element</h4>
+<div class="outline-text-4" id="text-4-2-1">
+<p>
+Definitions given by <code>uml-diagrams.org</code> are not necesseraly meet.
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="orgaad1b3d"></a>Element and Comment<br />
+<div class="outline-text-5" id="text-4-2-1-1">
+<ul class="org-ul">
+<li>a Comment is an Element;</li>
+<li>an Element may contain other Elements.</li>
+</ul>
+
+<p>
+Since a Comment doesn't own anything, and we want to meet the Liskov
+Substitution principle, a Comment isn't an Element.
+</p>
+
+<p>
+An Element may contains Comments, and a Comment may have one or more owning
+Elements.
+</p>
+</div>
+</li>
+
+<li><a id="org40b34d1"></a>Element and Owned_Element<br />
+<div class="outline-text-5" id="text-4-2-1-2">
+<p>
+The previous point is also true for Parameter: The only thing it may own is
+Comment.
+</p>
+
+<p>
+Any UML element (except for Comment and Relationship) can have one and only one Owning_Element, but
+not every UML element can own other element.
+</p>
+
+<p>
+A Named_Element can only be owned by one Named_Element (which is a Namespace).
+</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org529bfa4" class="outline-3">
+<h3 id="org529bfa4"><span class="section-number-3">4.3</span> Code generation</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Template files make it easy to change the generation without recompiling the
+generator.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org07c325d" class="outline-2">
+<h2 id="org07c325d"><span class="section-number-2">5</span> Implementation</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orgf7491eb" class="outline-3">
+<h3 id="orgf7491eb"><span class="section-number-3">5.1</span> Input</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+module: Project_Loader
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgcddc6c0" class="outline-2">
+<h2 id="orgcddc6c0"><span class="section-number-2">6</span> Links</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org538bdc9" class="outline-3">
+<h3 id="org538bdc9"><span class="section-number-3">6.1</span> [1] <a href="https://www.uml-diagrams.org/">uml-diagrams.org</a></h3>
+</div>
+
+<div id="outline-container-org5ab3a6d" class="outline-3">
+<h3 id="org5ab3a6d"><span class="section-number-3">6.2</span> [2] <a href="http://docs.adacore.com/live/wave/aws/html/template_parser/index.html">template parser documentation</a></h3>
+</div>
+</div>
+</div>
+</body>
+</html>
