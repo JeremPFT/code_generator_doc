@@ -4,6 +4,8 @@
 #+OPTIONS: ^:{}
 
 * links
+*main resource:* UML_2-4-1_Infrastructure_formal-11-08-05.pdf section 11
+
 https://openclassrooms.com/fr/courses/900279-apprenez-a-programmer-avec-ada/897336-la-programmation-modulaire-iii-genericite
 
 https://en.wikibooks.org/wiki/Ada_Programming/Generics
