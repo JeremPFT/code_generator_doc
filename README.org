@@ -1,0 +1,9 @@
+#+TITLE:	README for Code Generator project
+#+AUTHOR:	Jeremy PIffret
+#+EMAIL:	j.piffret@gmail.com
+#+DATE:		2019-09-06
+#+STARTUP:	content
+
+* Brief
+
+This repository contains the project documentation.
