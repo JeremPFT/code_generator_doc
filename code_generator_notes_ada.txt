@@ -45,8 +45,11 @@ Later to prevent recompilation it may be written
 
 The model should be able to represent any element of a header file.
 
-The model is a subset of UML langage. Implementation follows UML descriptions
-given in [[*%5B1%5D %5B%5Bhttps://www.uml-diagrams.org/%5D%5Buml-diagrams.org%5D%5D][{1}]].
+The model is a subset of UML langage.
+
+First implementation followed UML descriptions given in [[*%5B1%5D %5B%5Bhttps://www.uml-diagrams.org/%5D%5Buml-diagrams.org%5D%5D][{1}]].
+
+Now UML_2-4-1_Infrastructure_formal is used. See [[*%5B3%5D %5B%5Bhttps://www.omg.org/spec/UML/2.4.1/About-UML/%5D%5BUML 2.4.1%5D%5D][{3}]].
 
 ** Output
 
@@ -55,7 +58,7 @@ recompile project.
 
 * Architecture
 
-** Introductino
+** Introduction
 The chosen langage is =ada=.
 
 3 main modules are defined:
@@ -275,6 +278,8 @@ module: Project_Loader
 ** [1] [[https://www.uml-diagrams.org/][uml-diagrams.org]]
 
 ** [2] [[http://docs.adacore.com/live/wave/aws/html/template_parser/index.html][template parser documentation]]
+
+** [3] [[https://www.omg.org/spec/UML/2.4.1/About-UML/][UML 2.4.1]]
 
 * COMMENT Local Variables
 # Local Variables:
