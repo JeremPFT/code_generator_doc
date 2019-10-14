@@ -18,12 +18,9 @@ https://bellekens.com/2011/08/10/uml-best-practice-attribute-or-association/
 
 ** TODO rename components
 
-*** TODO "code_generator_input" to "ada_parser_dsl_uml_model"
-
-*** TODO "code_generator_model" to "ada_uml_model"
-
-*** TODO "code_generator_output" to "ada_dsl_uml_model_ada_output"
-
+*** TODO "code_generator_input" to "code_generator_ada/dsl_parser"
+*** TODO "code_generator_model" to "code_generator_ada/uml_model"
+*** TODO "code_generator_output" to "code_generator_ada/dsl_output"
 * Requirements
 
 =Code Generator= aims to automatize generation of source code to enforce chosen
