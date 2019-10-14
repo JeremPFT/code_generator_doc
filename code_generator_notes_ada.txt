@@ -290,6 +290,6 @@ module: Project_Loader
 
 * COMMENT Local Variables
 # Local Variables:
-# mode:org
+# mode:org-mode
 # coding: utf-8-unix
 # End:
