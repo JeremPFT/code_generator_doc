@@ -1,0 +1,17 @@
+digraph structs {
+        // DEFAULT OPTIONS
+        graph [autosize="false", size="9,12", resolution="100", nodesep="0.75", overlap="false", spline="true", rankdir="LR"];
+        node [shape="plaintext"];
+        // NODES
+        "[<Code_Generator>];" [label=<<table><tr><td>Code_Generator</td></tr></table>>];
+        "[<DSLDomain Specific Langage<br></br><br></br>Higher level syntax to define code specification>];" [label=<<table><tr><td>DSL</td></tr><tr><td BALIGN="LEFT" ALIGN="LEFT">Domain Specific Langage<br></br><br></br>Higher level syntax to define code specification</td></tr></table>>];
+        "[<Model>];" [label=<<table><tr><td>Model</td></tr></table>>];
+        "[<Parser>];" [label=<<table><tr><td>Parser</td></tr></table>>];
+        "[<Generator>];" [label=<<table><tr><td>Generator</td></tr></table>>];
+        "[<AdaFirst target language>];" [label=<<table><tr><td>Ada</td></tr><tr><td BALIGN="LEFT" ALIGN="LEFT">First target language</td></tr></table>>];
+        // EDGES
+        "[<Code_Generator>];" -> "[<DSLDomain Specific Langage<br></br><br></br>Higher level syntax to define code specification>];";
+        "[<Code_Generator>];" -> "[<Model>];";
+        "[<Code_Generator>];" -> "[<Parser>];";
+        "[<Code_Generator>];" -> "[<Generator>];";
+        "[<Generator>];" -> "[<AdaFirst target language>];";}

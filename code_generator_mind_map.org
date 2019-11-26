@@ -1,0 +1,22 @@
+# to generate:
+# dot code_generator_mind_map_diagram_expected.dot -Tpng -o see.png
+
+* Code_Generator
+
+Automatization of repeatitive code writting
+
+** DSL
+
+Domain Specific Langage
+
+Higher level syntax to define code specification
+
+** Model
+
+** Parser
+
+** Generator
+
+*** Ada
+
+First target language
