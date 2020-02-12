@@ -1,0 +1,182 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{trees}
+
+\usepackage{setspace}
+
+\usepackage{comment}
+
+\usepackage[hidelinks,
+pdfauthor={Stefan Kottwitz},
+pdftitle={Code Generator},
+pdfsubject={no subject},
+pdfkeywords={Mindmaps},
+pdfproducer={Latex with hyperref},
+pdfcreator={pdflatex},
+pdfencoding=auto]{hyperref}
+
+\usepackage{enumitem}
+\setitemize{%
+  noitemsep,
+  topsep=0pt,
+  parsep=0pt,
+  partopsep=0pt,
+  leftmargin=10pt}
+
+% \tikzstyle{myNode} = [
+% rectangle,
+% rounded corners,
+% draw=black,
+% node distance=0.5cm]
+% very thick,
+% minimum width = 12em,
+% minimum height=4.1em,
+% text width=10em,
+
+\newcommand{\content}[2]% #1=width #2=text
+{\begin{minipage}{#1}
+    \centering #2
+  \end{minipage}%
+}
+
+\begin{document}
+
+\begin{comment}
+  :Title: A mindmap showing TeX projects supported by DANTE e.V
+
+  :Tags: Mindmaps
+
+  :Author: Stefan Kottwitz
+
+  :Slug: servers
+
+  A mindmap showing TeX projects supported by DANTE e.V., the german language
+  TeX user group with home page at www.dante.de.
+
+  DANTE sponsors their server costs for the web sites shown in the mindmap.
+
+  - TeX forums
+  - TeX galleries
+  - TeX blogs
+  - Tools, documentation and FAQ
+
+  Less for explanation, as the code has been done quick and far from perfect,
+  but is shown here to share.
+\end{comment}
+
+% level distance=10cm,
+% sibling distance=3cm,
+% node distance=10cm%
+\begin{tikzpicture}%
+  [%
+  grow cyclic,
+  every node/.style={%
+    rectangle,
+    rounded corners,
+    draw = black,
+    % top color = white,
+    % bottom color = red!50,
+    fill=red!50,
+  },
+  level 1/.append style={%
+    level distance = 4cm,
+    sibling angle = \directlua{tex.sprint(360 / 3)},
+  },
+  level 2/.append style={%
+    level distance = 3cm,
+    sibling angle = \directlua{tex.sprint(360 / 4)},
+  },
+  level 3/.append style={%
+    level distance = 3cm,
+    sibling angle = \directlua{tex.sprint(360 / 4)},
+  }%
+  ]
+  \path
+  %
+  % central node: CODE GENERATOR
+  %
+  node[fill=black!40]{%
+    \content{14em}{
+      Code generator
+      \begin{itemize}
+      \item {\it automatize repetitive actions}
+      \item {\it coding styles}
+      \end{itemize}
+    }
+  }%
+  %
+  % INPUT: subprogram => define api / text => define syntax
+  %
+  child{node{\content{10em}{
+        Input
+        \begin{itemize}
+        \item {\it using subprograms}
+        \item {\it using text}
+        \end{itemize}
+      }}
+    child[level distance = 5cm]{node{\content{6em}{
+          Subprograms
+          \begin{itemize}
+          \item {\it define an API}
+          \end{itemize}%
+        }}}
+    child{node{\content{12em}{
+          Domain Specific Langage
+          \begin{itemize}
+          \item {\it define a parser}
+          \end{itemize}%
+        }}}
+  }
+  %
+  % MODEL
+  %
+  child[level distance = 6cm]{node{\content{7em}{
+        Model
+        \begin{itemize}
+        \item {\it data objects\\ definitions}
+        \end{itemize}
+      }}
+    [level distance = 4cm, sibling angle = 45]
+    child{node{\content{7ex}{
+          Project%
+        }}}
+    child{node{\content{10ex}{
+          UML elements%
+        }}
+      child{node[%
+        rectangle,%
+        % top color = white,
+        % bottom color = black!30,
+        fill=black!60,
+        rounded corners = 0,
+        ]{\content{10ex}{
+            \it See UML specification}}}
+    }
+  }
+  %
+  % OUTPUT
+  %
+  child{
+    node{
+      \content{5em}{
+        Output
+      }%content
+    }%node
+    child{%
+      node{%
+        \content{4ex}{
+          Ada%
+        }%content
+      }%node
+    }%child
+    child{%
+      node{%
+        \content{5em}{%
+          Python
+        }%content
+      }%node
+    }%child
+  };
+
+\end{tikzpicture}
+
+\end{document}
